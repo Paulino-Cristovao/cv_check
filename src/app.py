@@ -27,6 +27,7 @@ from generator.word_generator import WordDocumentGenerator
 from generator.recommendations import RecommendationGenerator
 from utils.openai_client import OpenAIClient
 from utils.helpers import setup_logging, sanitize_text
+from utils.validation import ContentValidator
 
 # Set up logging
 setup_logging()
@@ -46,6 +47,9 @@ class CVCheckApp:
         self.gap_analyzer = GapAnalyzer()
         self.recommendation_generator = RecommendationGenerator()
         self.word_generator = WordDocumentGenerator()
+        
+        # Initialize validation system
+        self.content_validator = ContentValidator()
 
         # Initialize OpenAI client
         self.openai_client = self._initialize_openai_client()
@@ -108,7 +112,7 @@ class CVCheckApp:
             Tuple of (score, strong_points, weak_points, improvements, interview_prep_file)
         """
         try:
-            # Validate inputs
+            # Basic input validation
             if not resume_file or not job_description.strip():
                 return (
                     0,
@@ -129,7 +133,21 @@ class CVCheckApp:
                     None,
                 )
 
-            # Sanitize inputs
+            # Advanced content validation with security guardrails
+            is_valid, validation_error = self.content_validator.validate_inputs(
+                resume_text, job_description
+            )
+            
+            if not is_valid:
+                return (
+                    0,
+                    f"❌ {validation_error}",
+                    "## 🔒 Content Validation Failed\n\nPlease ensure you're providing legitimate resume and job description content.",
+                    "## 📝 How to Fix\n\n**For Resume:**\n- Include personal information (name, email, phone)\n- Add education section\n- Include work experience\n- List relevant skills\n\n**For Job Description:**\n- Include job title and role details\n- Add company information\n- List requirements and qualifications\n- Include responsibilities",
+                    None,
+                )
+
+            # Sanitize inputs (already done in validator, but keep for extra safety)
             resume_text = sanitize_text(resume_text)
             job_description = sanitize_text(job_description)
 
@@ -344,81 +362,88 @@ class CVCheckApp:
     def create_gradio_interface(self) -> gr.Blocks:
         """Create and configure a professional Gradio interface."""
 
-        # Blue, white, and black color scheme with high contrast
+        # Professional modern color scheme - Navy, Teal, and Warm Grays
         css = """
         /* Main container styling */
         .gradio-container {
             max-width: 1400px !important;
             margin: 0 auto !important;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-            background-color: #ffffff !important;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif !important;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
         }
         
-        /* Header styling - Blue gradient */
+        /* Header styling - Professional Navy gradient */
         .header-container {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
             color: white !important;
-            padding: 2rem !important;
-            border-radius: 12px !important;
+            padding: 2.5rem !important;
+            border-radius: 16px !important;
             margin-bottom: 2rem !important;
             text-align: center !important;
-            box-shadow: 0 8px 32px rgba(30, 58, 138, 0.3) !important;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.3) !important;
+            border: 1px solid #475569 !important;
         }
         
-        /* Score display styling - Blue theme */
+        /* Score display styling - Teal theme */
         .score-container {
-            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%) !important;
             color: white !important;
-            padding: 1.5rem !important;
-            border-radius: 12px !important;
+            padding: 2rem !important;
+            border-radius: 16px !important;
             text-align: center !important;
-            margin: 1rem 0 !important;
-            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3) !important;
+            margin: 1.5rem 0 !important;
+            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.25) !important;
+            border: 1px solid #5eead4 !important;
         }
         
         .score-display {
-            font-size: 3em !important;
-            font-weight: bold !important;
+            font-size: 3.2em !important;
+            font-weight: 700 !important;
             margin: 0 !important;
             color: white !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
         }
         
         .score-label {
-            font-size: 1.2em !important;
-            opacity: 0.9 !important;
-            margin-bottom: 0.5rem !important;
+            font-size: 1.3em !important;
+            opacity: 0.95 !important;
+            margin-bottom: 0.8rem !important;
             color: white !important;
+            font-weight: 500 !important;
         }
         
-        /* Input section styling - Light blue background */
+        /* Input section styling - Warm gray background */
         .input-section {
-            background: #f8fafc !important;
-            padding: 1.5rem !important;
-            border-radius: 12px !important;
-            border: 2px solid #e2e8f0 !important;
-            margin-bottom: 1rem !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%) !important;
+            padding: 2rem !important;
+            border-radius: 16px !important;
+            border: 2px solid #e5e7eb !important;
+            margin-bottom: 1.5rem !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
         }
         
-        /* Button styling - Blue theme */
+        /* Button styling - Teal theme */
         .analyze-button {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%) !important;
             border: none !important;
-            border-radius: 8px !important;
-            padding: 1rem 2rem !important;
+            border-radius: 12px !important;
+            padding: 1.2rem 2rem !important;
             font-size: 1.1em !important;
-            font-weight: bold !important;
+            font-weight: 600 !important;
             color: white !important;
             cursor: pointer !important;
             transition: all 0.3s ease !important;
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4) !important;
+            box-shadow: 0 6px 20px rgba(15, 118, 110, 0.3) !important;
             width: 100% !important;
-            margin-top: 1rem !important;
+            margin-top: 1.5rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
         }
         
         .analyze-button:hover {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.6) !important;
+            background: linear-gradient(135deg, #134e4a 0%, #0f766e 100%) !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4) !important;
         }
         
         /* Tab styling - High contrast */
@@ -430,33 +455,34 @@ class CVCheckApp:
             border: 1px solid #cbd5e1 !important;
         }
         
-        /* Result sections - High contrast with black text */
+        /* Result sections - Professional styling */
         .result-section {
-            background: white !important;
-            border-radius: 12px !important;
-            padding: 2rem !important;
-            margin: 1rem 0 !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-            border: 2px solid #e2e8f0 !important;
-            border-left: 6px solid #1e40af !important;
+            background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%) !important;
+            border-radius: 16px !important;
+            padding: 2.5rem !important;
+            margin: 1.5rem 0 !important;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08) !important;
+            border: 2px solid #f3f4f6 !important;
+            border-left: 6px solid #0d9488 !important;
         }
         
-        /* Analysis cards with high contrast */
+        /* Analysis cards with modern styling */
         .analysis-card {
-            background: white !important;
-            border-radius: 8px !important;
-            padding: 1.5rem !important;
-            margin: 1rem 0 !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-            border: 2px solid #e2e8f0 !important;
-            transition: all 0.2s ease !important;
-            color: #000000 !important;
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%) !important;
+            border-radius: 12px !important;
+            padding: 1.8rem !important;
+            margin: 1.2rem 0 !important;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08) !important;
+            border: 2px solid #f3f4f6 !important;
+            transition: all 0.3s ease !important;
+            color: #1f2937 !important;
         }
         
         .analysis-card:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
-            border-color: #3b82f6 !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+            border-color: #14b8a6 !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%) !important;
         }
         
         /* Enhanced text contrast for analysis content */
@@ -476,26 +502,27 @@ class CVCheckApp:
             font-weight: bold !important;
         }
         
-        /* Download section - Blue theme */
+        /* Download section - Teal theme */
         .download-section {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
-            padding: 1.5rem !important;
-            border-radius: 12px !important;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
+            padding: 2rem !important;
+            border-radius: 16px !important;
             text-align: center !important;
-            margin: 2rem 0 !important;
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2) !important;
-            border: 2px solid #93c5fd !important;
-            color: #1e40af !important;
+            margin: 2.5rem 0 !important;
+            box-shadow: 0 8px 25px rgba(13, 148, 136, 0.15) !important;
+            border: 2px solid #a7f3d0 !important;
+            color: #0f766e !important;
         }
         
-        /* Footer styling - Dark blue/black */
+        /* Footer styling - Dark navy */
         .footer-section {
-            background: #0f172a !important;
-            color: white !important;
-            padding: 2rem !important;
-            border-radius: 12px !important;
-            margin-top: 2rem !important;
-            border: 1px solid #1e293b !important;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+            color: #e2e8f0 !important;
+            padding: 2.5rem !important;
+            border-radius: 16px !important;
+            margin-top: 3rem !important;
+            border: 1px solid #334155 !important;
+            box-shadow: 0 8px 25px rgba(15, 23, 42, 0.3) !important;
         }
         
         /* Progress indicator - Blue theme */

@@ -140,6 +140,7 @@ cython_debug/
 # Generated files
 outputs/
 temp/
+input/
 *.tmp
 *.bak
 

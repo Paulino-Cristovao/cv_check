@@ -1,0 +1,59 @@
+Software Engineer - Full Stack Developer
+TechCorp France
+Location: Paris, France
+
+Company Overview:
+TechCorp is a leading technology company specializing in fintech solutions. We serve over 1 million customers across Europe and are looking to expand our engineering team.
+
+Job Description:
+We are seeking a talented Full Stack Software Engineer to join our dynamic team in Paris. The ideal candidate will have strong experience in web development, API design, and modern JavaScript frameworks.
+
+Key Responsibilities:
+- Develop and maintain web applications using React and Node.js
+- Design and implement RESTful APIs and microservices
+- Collaborate with product managers and designers on feature development
+- Write clean, maintainable, and well-tested code
+- Participate in code reviews and technical discussions
+- Deploy applications to cloud platforms (AWS preferred)
+- Work with databases (PostgreSQL, MongoDB)
+- Follow Agile development methodologies
+
+Required Skills:
+- Bachelor's degree in Computer Science or related field
+- 3+ years of experience in software development
+- Strong proficiency in JavaScript, HTML, and CSS
+- Experience with React.js and Node.js
+- Knowledge of RESTful API design and development
+- Familiarity with Git version control
+- Experience with SQL and NoSQL databases
+- Understanding of Agile/Scrum methodologies
+
+Preferred Skills:
+- Experience with cloud platforms (AWS, Azure, GCP)
+- Knowledge of containerization (Docker, Kubernetes)
+- Experience with Python or Java
+- Familiarity with CI/CD pipelines
+- Understanding of security best practices
+- Experience in fintech or financial services industry
+
+What We Offer:
+- Competitive salary range: €50,000 - €70,000 per year
+- Comprehensive health insurance
+- 5 weeks paid vacation + public holidays
+- Professional development budget
+- Flexible working hours and remote work options
+- Modern office in central Paris
+- Team building events and company retreats
+
+Requirements:
+- Must be eligible to work in France
+- Fluent in French and English
+- Available for full-time employment
+- Willing to work in a fast-paced startup environment
+
+Application Process:
+Please submit your resume and a brief cover letter explaining your interest in the position. We review applications on a rolling basis and aim to respond within one week.
+
+TechCorp is an equal opportunity employer committed to diversity and inclusion. We welcome applications from candidates of all backgrounds.
+
+Join us in building the future of financial technology!

@@ -144,6 +144,11 @@ input/
 *.tmp
 *.bak
 
+# Analysis documents and results
+CV_Analysis_*.docx
+Interview_Prep_*.docx
+*_analysis_*.docx
+
 # OS generated files
 .DS_Store
 .DS_Store?

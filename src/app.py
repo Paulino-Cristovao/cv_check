@@ -342,112 +342,391 @@ class CVCheckApp:
         }
 
     def create_gradio_interface(self) -> gr.Blocks:
-        """Create and configure Gradio interface."""
+        """Create and configure a professional Gradio interface."""
 
-        # Custom CSS for better styling
+        # Enhanced CSS for professional styling
         css = """
+        /* Main container styling */
         .gradio-container {
-            max-width: 1200px !important;
+            max-width: 1400px !important;
+            margin: 0 auto !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
         }
-        .score-display {
-            font-size: 2em !important;
-            font-weight: bold !important;
+        
+        /* Header styling */
+        .header-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            padding: 2rem !important;
+            border-radius: 15px !important;
+            margin-bottom: 2rem !important;
             text-align: center !important;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3) !important;
+        }
+        
+        /* Score display styling */
+        .score-container {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+            color: white !important;
+            padding: 1.5rem !important;
+            border-radius: 15px !important;
+            text-align: center !important;
+            margin: 1rem 0 !important;
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.3) !important;
+        }
+        
+        .score-display {
+            font-size: 3em !important;
+            font-weight: bold !important;
+            margin: 0 !important;
+        }
+        
+        .score-label {
+            font-size: 1.2em !important;
+            opacity: 0.9 !important;
+            margin-bottom: 0.5rem !important;
+        }
+        
+        /* Input section styling */
+        .input-section {
+            background: #f8f9fa !important;
+            padding: 1.5rem !important;
+            border-radius: 15px !important;
+            border: 2px solid #e9ecef !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Button styling */
+        .analyze-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 1rem 2rem !important;
+            font-size: 1.1em !important;
+            font-weight: bold !important;
+            color: white !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+            width: 100% !important;
+            margin-top: 1rem !important;
+        }
+        
+        .analyze-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+        }
+        
+        /* Tab styling */
+        .tab-nav {
+            background: #f8f9fa !important;
+            border-radius: 10px !important;
+            padding: 0.5rem !important;
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Result sections */
+        .result-section {
+            background: white !important;
+            border-radius: 15px !important;
+            padding: 1.5rem !important;
+            margin: 1rem 0 !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+            border-left: 5px solid #667eea !important;
+        }
+        
+        /* Download section */
+        .download-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%) !important;
+            padding: 1.5rem !important;
+            border-radius: 15px !important;
+            text-align: center !important;
+            margin: 2rem 0 !important;
+            box-shadow: 0 6px 20px rgba(252, 182, 159, 0.3) !important;
+        }
+        
+        /* Footer styling */
+        .footer-section {
+            background: #2c3e50 !important;
+            color: white !important;
+            padding: 2rem !important;
+            border-radius: 15px !important;
+            margin-top: 2rem !important;
+        }
+        
+        /* Progress indicator */
+        .progress-container {
+            background: #e9ecef !important;
+            border-radius: 10px !important;
+            height: 8px !important;
+            margin: 1rem 0 !important;
+            overflow: hidden !important;
+        }
+        
+        /* Loading animation */
+        .loading {
+            border: 3px solid #f3f3f3 !important;
+            border-top: 3px solid #667eea !important;
+            border-radius: 50% !important;
+            width: 30px !important;
+            height: 30px !important;
+            animation: spin 1s linear infinite !important;
+            margin: 1rem auto !important;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Card styling for better organization */
+        .analysis-card {
+            background: white !important;
+            border-radius: 15px !important;
+            padding: 1.5rem !important;
+            margin: 1rem 0 !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+            border: 1px solid #e9ecef !important;
+            transition: transform 0.2s ease !important;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .gradio-container {
+                max-width: 100% !important;
+                padding: 1rem !important;
+            }
+            
+            .score-display {
+                font-size: 2em !important;
+            }
+            
+            .header-container {
+                padding: 1.5rem !important;
+            }
         }
         """
 
-        with gr.Blocks(css=css, title="CV Check - PhD Resume Optimizer") as interface:
-            # Header
-            gr.Markdown(
-                """
-            # 🎯 CV Check - PhD Resume Optimizer
-            ### AI-powered resume analysis for PhD holders in the French job market
-            
-            Upload your resume and paste a job description to get:
-            - **Compatibility Score** (0-100)
-            - **Strong Points** analysis with leverage tips
-            - **Weak Points** identification with impact assessment  
-            - **Specific Improvements** with actionable recommendations
-            - **Interview Preparation** document (Word format)
-            """
+        with gr.Blocks(
+            css=css, 
+            title="CV Check - Professional Resume Analysis",
+            theme=gr.themes.Soft(
+                primary_hue="blue",
+                secondary_hue="purple",
+                neutral_hue="slate",
+                font=["system-ui", "sans-serif"]
             )
-
-            with gr.Row():
-                with gr.Column(scale=1):
-                    # Input section
-                    gr.Markdown("## 📄 Input")
-
-                    resume_file = gr.File(
-                        label="Upload Resume (PDF or DOCX)",
-                        file_types=[".pdf", ".docx", ".doc"],
-                        type="filepath",
-                    )
-
-                    job_description = gr.Textbox(
-                        label="Job Description",
-                        placeholder="Paste the complete job description here...",
-                        lines=10,
-                        max_lines=15,
-                    )
-
-                    analyze_btn = gr.Button(
-                        "🔍 Analyze Resume", variant="primary", size="lg"
-                    )
-
-                with gr.Column(scale=2):
-                    # Output section
-                    gr.Markdown("## 📊 Analysis Results")
-
-                    with gr.Row():
-                        score_display = gr.Number(
-                            label="Compatibility Score",
-                            precision=0,
-                            elem_classes=["score-display"],
+        ) as interface:
+            
+            # Professional Header
+            with gr.Row(elem_classes=["header-container"]):
+                gr.HTML("""
+                <div style="text-align: center;">
+                    <h1 style="margin: 0; font-size: 2.5em; font-weight: 700;">
+                        🎯 CV Check Professional
+                    </h1>
+                    <h2 style="margin: 0.5rem 0; font-size: 1.4em; opacity: 0.9; font-weight: 300;">
+                        AI-Powered Resume Analysis for PhD Professionals
+                    </h2>
+                    <p style="margin: 1rem 0 0 0; font-size: 1.1em; opacity: 0.8;">
+                        Transform your academic expertise into industry success
+                    </p>
+                </div>
+                """)
+            
+            # Main content area
+            with gr.Row(equal_height=False):
+                # Left column - Input section
+                with gr.Column(scale=5, min_width=400):
+                    with gr.Group(elem_classes=["input-section"]):
+                        gr.Markdown("### 📄 **Upload & Analyze**")
+                        
+                        gr.Markdown("*Supported formats: PDF, DOCX, DOC*")
+                        resume_file = gr.File(
+                            label="📎 Upload Your Resume",
+                            file_types=[".pdf", ".docx", ".doc"],
+                            type="filepath"
                         )
-
-                    with gr.Tabs():
-                        with gr.TabItem("💪 Strong Points"):
-                            strong_points_output = gr.Markdown()
-
-                        with gr.TabItem("⚠️ Weak Points"):
-                            weak_points_output = gr.Markdown()
-
-                        with gr.TabItem("🚀 Improvements"):
-                            improvements_output = gr.Markdown()
-
-            # Complete results download section
-            with gr.Row():
-                gr.Markdown("## 📋 Complete Analysis Report")
-                interview_prep_file = gr.File(
-                    label="Download Complete CV Analysis Report (Word Document)",
-                    visible=True,
-                )
-
-            # Footer
-            gr.Markdown(
-                """
-            ---
-            **Tips for best results:**
-            - Upload a complete, up-to-date resume
-            - Provide the full job description including requirements and responsibilities
-            - Review all recommendations carefully before implementing changes
-            - Download the complete analysis report for detailed insights and interview preparation
+                        
+                        gr.Markdown("*The more detailed the job description, the better the analysis*")
+                        job_description = gr.Textbox(
+                            label="📋 Job Description",
+                            placeholder="Paste the complete job description here...\n\nInclude requirements, responsibilities, and company information for best results.",
+                            lines=12,
+                            max_lines=20
+                        )
+                        
+                        with gr.Row():
+                            analyze_btn = gr.Button(
+                                "🚀 Start Analysis",
+                                variant="primary",
+                                size="lg",
+                                elem_classes=["analyze-button"]
+                            )
+                            clear_btn = gr.Button(
+                                "🔄 Clear All",
+                                variant="secondary",
+                                size="lg"
+                            )
+                
+                # Right column - Results section  
+                with gr.Column(scale=7, min_width=500):
+                    # Score display
+                    with gr.Group(elem_classes=["score-container"], visible=False) as score_section:
+                        gr.HTML("""
+                        <div class="score-label">Compatibility Score</div>
+                        """)
+                        score_display = gr.HTML("""
+                        <div class="score-display">--</div>
+                        """)
+                    
+                    # Results tabs
+                    with gr.Group(elem_classes=["result-section"], visible=False) as results_section:
+                        gr.Markdown("### 📊 **Detailed Analysis**")
+                        
+                        with gr.Tabs():
+                            with gr.TabItem("💪 Strengths", elem_id="strengths-tab"):
+                                strong_points_output = gr.Markdown(
+                                    "Your analysis results will appear here...",
+                                    elem_classes=["analysis-card"]
+                                )
+                            
+                            with gr.TabItem("⚠️ Improvements", elem_id="improvements-tab"):
+                                weak_points_output = gr.Markdown(
+                                    "Areas for improvement will be shown here...",
+                                    elem_classes=["analysis-card"]
+                                )
+                            
+                            with gr.TabItem("🚀 Recommendations", elem_id="recommendations-tab"):
+                                improvements_output = gr.Markdown(
+                                    "Specific recommendations will be provided here...",
+                                    elem_classes=["analysis-card"]
+                                )
+                            
+                            with gr.TabItem("📈 Score Breakdown", elem_id="breakdown-tab"):
+                                score_breakdown_output = gr.Markdown(
+                                    "Detailed score breakdown will be available here...",
+                                    elem_classes=["analysis-card"]
+                                )
             
-            *Built for PhD holders navigating the French job market* 🇫🇷
-            """
-            )
-
+            # Download section
+            with gr.Group(elem_classes=["download-section"], visible=False) as download_section:
+                gr.Markdown("### 📋 **Complete Analysis Report**")
+                gr.Markdown("*Get your comprehensive analysis document with interview preparation guide*")
+                
+                interview_prep_file = gr.File(
+                    label="📄 Download Professional Analysis Report (Word Document)",
+                    visible=True,
+                    interactive=False
+                )
+            
+            # Progress indicator
+            progress_html = gr.HTML(visible=False)
+            
+            # Professional footer
+            with gr.Group(elem_classes=["footer-section"]):
+                gr.Markdown("""
+                ### 💡 **How to Get the Best Results**
+                
+                **📎 Resume Tips:**
+                - Upload your most recent, complete resume
+                - Ensure all sections are clearly formatted
+                - Include quantified achievements where possible
+                
+                **📋 Job Description Tips:**
+                - Copy the complete job posting
+                - Include requirements, responsibilities, and company info
+                - Don't forget salary range and benefits if mentioned
+                
+                **🎯 Analysis Features:**
+                - Real-time compatibility scoring (0-100)
+                - Detailed strengths and improvement areas
+                - Actionable recommendations with priority levels
+                - Professional interview preparation guide
+                - ATS optimization suggestions
+                
+                ---
+                *🇫🇷 Specially designed for PhD professionals transitioning to industry roles in France*
+                """)
+            
+            # Enhanced analysis function with UI updates
+            def enhanced_analysis(resume, job_desc):
+                """Enhanced analysis with proper UI state management."""
+                if not resume or not job_desc or not job_desc.strip():
+                    return [
+                        gr.update(visible=False),  # score_section
+                        gr.update(value="--"),      # score_display  
+                        gr.update(visible=False),  # results_section
+                        "Please upload a resume and provide a job description.",  # strong_points
+                        "",  # weak_points
+                        "",  # improvements  
+                        "",  # score_breakdown
+                        gr.update(visible=False),  # download_section
+                        None,  # file
+                        gr.update(visible=False)   # progress
+                    ]
+                
+                # Run the analysis
+                score, strong, weak, improvements, file_path = self.analyze_resume_job_match(resume, job_desc)
+                
+                # Format score display
+                score_html = f"""<div class="score-display">{score}/100</div>"""
+                score_breakdown = f"**Overall Score: {score}/100**\n\nThis score reflects the compatibility between your resume and the job requirements. Detailed breakdown is available in the downloadable analysis report."
+                
+                return [
+                    gr.update(visible=True),   # Show score section
+                    score_html,               # Update score display
+                    gr.update(visible=True),   # Show results section
+                    strong,                   # Strong points
+                    weak,                     # Weak points
+                    improvements,             # Improvements
+                    score_breakdown,          # Score breakdown
+                    gr.update(visible=True),   # Show download section
+                    file_path,                # File path
+                    gr.update(visible=False)   # Hide progress
+                ]
+            
+            def clear_all():
+                """Clear all inputs and outputs."""
+                return [
+                    None,  # Clear resume file
+                    "",    # Clear job description
+                    gr.update(visible=False),  # Hide score section
+                    "--",  # Reset score display
+                    gr.update(visible=False),  # Hide results section
+                    "Your analysis results will appear here...",  # Reset strong points
+                    "Areas for improvement will be shown here...",  # Reset weak points
+                    "Specific recommendations will be provided here...",  # Reset improvements
+                    "Detailed score breakdown will be available here...",  # Reset breakdown
+                    gr.update(visible=False),  # Hide download section
+                    None,  # Clear file
+                    gr.update(visible=False)   # Hide progress
+                ]
+            
             # Connect the analysis function
             analyze_btn.click(
-                fn=self.analyze_resume_job_match,
+                fn=enhanced_analysis,
                 inputs=[resume_file, job_description],
                 outputs=[
-                    score_display,
-                    strong_points_output,
-                    weak_points_output,
-                    improvements_output,
-                    interview_prep_file,
-                ],
+                    score_section, score_display, results_section,
+                    strong_points_output, weak_points_output, improvements_output, score_breakdown_output,
+                    download_section, interview_prep_file, progress_html
+                ]
+            )
+            
+            # Clear button functionality
+            clear_btn.click(
+                fn=clear_all,
+                outputs=[
+                    resume_file, job_description, score_section, score_display, results_section,
+                    strong_points_output, weak_points_output, improvements_output, score_breakdown_output,
+                    download_section, interview_prep_file, progress_html
+                ]
             )
 
         return interface

@@ -344,129 +344,173 @@ class CVCheckApp:
     def create_gradio_interface(self) -> gr.Blocks:
         """Create and configure a professional Gradio interface."""
 
-        # Enhanced CSS for professional styling
+        # Blue, white, and black color scheme with high contrast
         css = """
         /* Main container styling */
         .gradio-container {
             max-width: 1400px !important;
             margin: 0 auto !important;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            background-color: #ffffff !important;
         }
         
-        /* Header styling */
+        /* Header styling - Blue gradient */
         .header-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
             color: white !important;
             padding: 2rem !important;
-            border-radius: 15px !important;
+            border-radius: 12px !important;
             margin-bottom: 2rem !important;
             text-align: center !important;
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3) !important;
+            box-shadow: 0 8px 32px rgba(30, 58, 138, 0.3) !important;
         }
         
-        /* Score display styling */
+        /* Score display styling - Blue theme */
         .score-container {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
             color: white !important;
             padding: 1.5rem !important;
-            border-radius: 15px !important;
+            border-radius: 12px !important;
             text-align: center !important;
             margin: 1rem 0 !important;
-            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.3) !important;
+            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3) !important;
         }
         
         .score-display {
             font-size: 3em !important;
             font-weight: bold !important;
             margin: 0 !important;
+            color: white !important;
         }
         
         .score-label {
             font-size: 1.2em !important;
             opacity: 0.9 !important;
             margin-bottom: 0.5rem !important;
+            color: white !important;
         }
         
-        /* Input section styling */
+        /* Input section styling - Light blue background */
         .input-section {
-            background: #f8f9fa !important;
+            background: #f8fafc !important;
             padding: 1.5rem !important;
-            border-radius: 15px !important;
-            border: 2px solid #e9ecef !important;
+            border-radius: 12px !important;
+            border: 2px solid #e2e8f0 !important;
             margin-bottom: 1rem !important;
         }
         
-        /* Button styling */
+        /* Button styling - Blue theme */
         .analyze-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
             border: none !important;
-            border-radius: 10px !important;
+            border-radius: 8px !important;
             padding: 1rem 2rem !important;
             font-size: 1.1em !important;
             font-weight: bold !important;
             color: white !important;
             cursor: pointer !important;
             transition: all 0.3s ease !important;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4) !important;
             width: 100% !important;
             margin-top: 1rem !important;
         }
         
         .analyze-button:hover {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%) !important;
             transform: translateY(-2px) !important;
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.6) !important;
         }
         
-        /* Tab styling */
+        /* Tab styling - High contrast */
         .tab-nav {
-            background: #f8f9fa !important;
-            border-radius: 10px !important;
+            background: #f1f5f9 !important;
+            border-radius: 8px !important;
             padding: 0.5rem !important;
             margin-bottom: 1rem !important;
+            border: 1px solid #cbd5e1 !important;
         }
         
-        /* Result sections */
+        /* Result sections - High contrast with black text */
         .result-section {
             background: white !important;
-            border-radius: 15px !important;
-            padding: 1.5rem !important;
+            border-radius: 12px !important;
+            padding: 2rem !important;
             margin: 1rem 0 !important;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-            border-left: 5px solid #667eea !important;
+            border: 2px solid #e2e8f0 !important;
+            border-left: 6px solid #1e40af !important;
         }
         
-        /* Download section */
-        .download-section {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%) !important;
+        /* Analysis cards with high contrast */
+        .analysis-card {
+            background: white !important;
+            border-radius: 8px !important;
             padding: 1.5rem !important;
-            border-radius: 15px !important;
+            margin: 1rem 0 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+            border: 2px solid #e2e8f0 !important;
+            transition: all 0.2s ease !important;
+            color: #000000 !important;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+            border-color: #3b82f6 !important;
+        }
+        
+        /* Enhanced text contrast for analysis content */
+        .analysis-card h1, .analysis-card h2, .analysis-card h3, 
+        .analysis-card h4, .analysis-card h5, .analysis-card h6 {
+            color: #000000 !important;
+            font-weight: bold !important;
+        }
+        
+        .analysis-card p, .analysis-card li, .analysis-card span {
+            color: #1f2937 !important;
+            line-height: 1.6 !important;
+        }
+        
+        .analysis-card strong, .analysis-card b {
+            color: #000000 !important;
+            font-weight: bold !important;
+        }
+        
+        /* Download section - Blue theme */
+        .download-section {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
+            padding: 1.5rem !important;
+            border-radius: 12px !important;
             text-align: center !important;
             margin: 2rem 0 !important;
-            box-shadow: 0 6px 20px rgba(252, 182, 159, 0.3) !important;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2) !important;
+            border: 2px solid #93c5fd !important;
+            color: #1e40af !important;
         }
         
-        /* Footer styling */
+        /* Footer styling - Dark blue/black */
         .footer-section {
-            background: #2c3e50 !important;
+            background: #0f172a !important;
             color: white !important;
             padding: 2rem !important;
-            border-radius: 15px !important;
+            border-radius: 12px !important;
             margin-top: 2rem !important;
+            border: 1px solid #1e293b !important;
         }
         
-        /* Progress indicator */
+        /* Progress indicator - Blue theme */
         .progress-container {
-            background: #e9ecef !important;
+            background: #e2e8f0 !important;
             border-radius: 10px !important;
             height: 8px !important;
             margin: 1rem 0 !important;
             overflow: hidden !important;
         }
         
-        /* Loading animation */
+        /* Loading animation - Blue theme */
         .loading {
-            border: 3px solid #f3f3f3 !important;
-            border-top: 3px solid #667eea !important;
+            border: 3px solid #e2e8f0 !important;
+            border-top: 3px solid #3b82f6 !important;
             border-radius: 50% !important;
             width: 30px !important;
             height: 30px !important;
@@ -479,20 +523,49 @@ class CVCheckApp:
             100% { transform: rotate(360deg); }
         }
         
-        /* Card styling for better organization */
-        .analysis-card {
+        /* Tab content styling for better contrast */
+        .tab-content {
             background: white !important;
-            border-radius: 15px !important;
-            padding: 1.5rem !important;
-            margin: 1rem 0 !important;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-            border: 1px solid #e9ecef !important;
-            transition: transform 0.2s ease !important;
+            color: #000000 !important;
+            padding: 1rem !important;
+            border-radius: 8px !important;
+            border: 1px solid #e2e8f0 !important;
         }
         
-        .analysis-card:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
+        /* Ensure all text in tabs is high contrast */
+        .tab-content h1, .tab-content h2, .tab-content h3, 
+        .tab-content h4, .tab-content h5, .tab-content h6 {
+            color: #000000 !important;
+            font-weight: bold !important;
+        }
+        
+        .tab-content p, .tab-content li, .tab-content div {
+            color: #1f2937 !important;
+            line-height: 1.6 !important;
+        }
+        
+        .tab-content strong, .tab-content b {
+            color: #000000 !important;
+            font-weight: bold !important;
+        }
+        
+        /* Override Gradio's default bright colors */
+        .gradio-container .prose {
+            color: #000000 !important;
+        }
+        
+        .gradio-container .prose h1, 
+        .gradio-container .prose h2, 
+        .gradio-container .prose h3 {
+            color: #000000 !important;
+        }
+        
+        .gradio-container .prose p {
+            color: #1f2937 !important;
+        }
+        
+        .gradio-container .prose strong {
+            color: #000000 !important;
         }
         
         /* Responsive design */
@@ -509,15 +582,23 @@ class CVCheckApp:
             .header-container {
                 padding: 1.5rem !important;
             }
+            
+            .result-section {
+                padding: 1.5rem !important;
+            }
+            
+            .analysis-card {
+                padding: 1rem !important;
+            }
         }
         """
 
         with gr.Blocks(
             css=css, 
             title="CV Check - Professional Resume Analysis",
-            theme=gr.themes.Soft(
+            theme=gr.themes.Monochrome(
                 primary_hue="blue",
-                secondary_hue="purple",
+                secondary_hue="blue", 
                 neutral_hue="slate",
                 font=["system-ui", "sans-serif"]
             )
@@ -593,25 +674,25 @@ class CVCheckApp:
                             with gr.TabItem("💪 Strengths", elem_id="strengths-tab"):
                                 strong_points_output = gr.Markdown(
                                     "Your analysis results will appear here...",
-                                    elem_classes=["analysis-card"]
+                                    elem_classes=["analysis-card", "tab-content"]
                                 )
                             
                             with gr.TabItem("⚠️ Improvements", elem_id="improvements-tab"):
                                 weak_points_output = gr.Markdown(
                                     "Areas for improvement will be shown here...",
-                                    elem_classes=["analysis-card"]
+                                    elem_classes=["analysis-card", "tab-content"]
                                 )
                             
                             with gr.TabItem("🚀 Recommendations", elem_id="recommendations-tab"):
                                 improvements_output = gr.Markdown(
                                     "Specific recommendations will be provided here...",
-                                    elem_classes=["analysis-card"]
+                                    elem_classes=["analysis-card", "tab-content"]
                                 )
                             
                             with gr.TabItem("📈 Score Breakdown", elem_id="breakdown-tab"):
                                 score_breakdown_output = gr.Markdown(
                                     "Detailed score breakdown will be available here...",
-                                    elem_classes=["analysis-card"]
+                                    elem_classes=["analysis-card", "tab-content"]
                                 )
             
             # Download section

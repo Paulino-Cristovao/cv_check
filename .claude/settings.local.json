@@ -10,7 +10,8 @@
       "Bash(git init:*)",
       "Bash(git remote add:*)",
       "Bash(ls:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(rg:*)"
     ],
     "deny": []
   }

@@ -77,13 +77,22 @@ class WordDocumentGenerator:
             
             # Save document
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            safe_job_title = "".join(c for c in job_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
+            # Limit job title to first 50 characters and clean it
+            truncated_title = job_title[:50] if job_title else "Job"
+            safe_job_title = "".join(c for c in truncated_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
             safe_company = ""
             if company_name:
-                safe_company = f"_{company_name}"
+                truncated_company = company_name[:30]  # Limit company name too
+                safe_company = f"_{truncated_company}"
                 safe_company = "".join(c for c in safe_company if c.isalnum() or c in (' ', '-', '_')).rstrip()
             
-            filename = f"Interview_Prep_{safe_job_title}{safe_company}_{timestamp}.docx"
+            # Ensure total filename length is reasonable (max 150 chars)
+            base_name = f"Interview_Prep_{safe_job_title}{safe_company}_{timestamp}"
+            if len(base_name) > 140:  # Leave room for .docx
+                safe_job_title = safe_job_title[:30]
+                base_name = f"Interview_Prep_{safe_job_title}{safe_company}_{timestamp}"
+            
+            filename = f"{base_name}.docx"
             filepath = self.output_dir / filename
             
             doc.save(str(filepath))
